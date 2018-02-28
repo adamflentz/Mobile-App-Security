@@ -1,0 +1,16 @@
+{
+    "recipe": {
+        "name": "Salt Pie (gluten free)",
+        "ingredients": [
+            {
+                "name": "Kosher Salt",
+                "measurement": "pinch",
+                "value": 3
+            }
+        ],
+        "directions": [
+            "Eat 3 pinches of kosher salt"
+        ],
+        "picture": "salt.jpeg"
+    }
+}

@@ -1,0 +1,24 @@
+<recipe>
+    <name>
+        Salt Pie (gluten free)
+    </name>
+    <ingredients>
+        <ingredient>
+            <value>
+                3
+            </value>
+            <measurement>
+                Pinches
+            </measurement>
+            <name>
+                Kosher Salt
+            <name>
+        <ingredient>
+    </ingredients>
+    <directions>
+        <step>Eat 3 pinches of kosher salt</step>
+    </directions>
+    <picture_ref>
+        salt.jpeg
+    </picture_ref>
+</recipe>
