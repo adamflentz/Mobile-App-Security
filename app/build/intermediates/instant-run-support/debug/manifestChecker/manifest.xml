@@ -22,16 +22,15 @@
         android:testOnly="true"
         android:theme="@style/AppTheme" >
         <activity android:name="com.example.adam.recipeapp.MainActivity" >
-        </activity>
-        <activity android:name="com.example.adam.recipeapp.Ingredient" />
-        <activity android:name="com.example.adam.recipeapp.Editor" />
-        <activity android:name="com.example.adam.recipeapp.RecipeViewer" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.adam.recipeapp.Ingredient" />
+        <activity android:name="com.example.adam.recipeapp.Editor" />
+        <activity android:name="com.example.adam.recipeapp.RecipeViewer" />
         <activity android:name="com.example.adam.recipeapp.Recipe" />
 
         <meta-data
