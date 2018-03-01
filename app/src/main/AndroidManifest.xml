@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="Ingredient"/>
+        <activity android:name="Ingredient"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name="Editor"/>
         <activity android:name="RecipeViewer"/>
         <activity android:name="Recipe"/>
