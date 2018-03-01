@@ -1,4 +1,0 @@
-#Thu Mar 01 12:17:55 EST 2018
-base.0=/home/adam/Mobile-App-Security/app/build/intermediates/transforms/dexMerger/debug/44
-path.0=classes.dex
-renamed.0=classes.dex
