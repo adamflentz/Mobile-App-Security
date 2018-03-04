@@ -66,7 +66,7 @@ public class Ingredient extends ListActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Do something in response to button click
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CameraPage.class);
                 intent.putExtra("Ingr_Data", ingrList);
                 intent.putExtra("Instruct_Data", instrList);
                 startActivity(intent);
