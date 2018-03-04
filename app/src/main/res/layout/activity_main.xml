@@ -7,20 +7,26 @@
     android:layout_height="match_parent"
     tools:context="com.example.adam.recipeapp.MainActivity">
 
+
     <Button
         android:id="@+id/createBtn"
         style="@android:style/Widget.Material.Light.Button.Inset"
-        android:layout_width="145"
-        android:layout_height="60"
+        android:layout_width="145dp"
+        android:layout_height="60dp"
         android:text="Create Recipe"
-        tools:layout_editor_absoluteX="236dp"
-        tools:layout_editor_absoluteY="468dp" />
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.887"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.861" />
 
     <Button
         android:id="@+id/viewBtn"
         style="@android:style/Widget.DeviceDefault.Light.Button.Inset"
-        android:layout_width="145"
-        android:layout_height="60"
+        android:layout_width="145dp"
+        android:layout_height="60dp"
         android:text="View Recipes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
