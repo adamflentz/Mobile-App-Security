@@ -62,23 +62,26 @@ public class CameraPage extends AppCompatActivity {
 
                 EditText nameText = (EditText) findViewById(R.id.name);
 
-                String filename = nameText.toString();
+                String filename = "recipejson";
                 JSONObject recipeJSON = new JSONObject();
                 JSONObject individualRecipe = new JSONObject();
                 JSONObject ingredient = new JSONObject();
-                try{
-                    ingredient.put("name", "Kosher Salt");
-                    ingredient.put("value", "3");
-                    ingredient.put("measurement", "pinch");
+                List<String> IngredientList = new ArrayList<String>();
+
+                for(int i = 0; i < ingrList.size(); i++){
+                    IngredientList.add(ingrList.get(i));
                 }
-                catch (JSONException e){
-                    Log.e("JSON", "JSON not created");}
-                List<JSONObject> IngredientList = new ArrayList<JSONObject>();
-                IngredientList.add(ingredient);
+
+
+
                 List<String> Directions = new ArrayList<String>();
-                Directions.add("Eat 3 pinches of Kosher Salt");
+
+                for(int i = 0; i < instrList.size(); i++){
+                    Directions.add(instrList.get(i));
+                }
+
                 try {
-                    individualRecipe.put("name", "Salt Pie (gluten free)");
+                    individualRecipe.put("name", nameText.toString());
                     individualRecipe.put("ingredients", IngredientList);
                     individualRecipe.put("directions", Directions);
                     individualRecipe.put("picture", "salt.jpeg");
@@ -94,8 +97,10 @@ public class CameraPage extends AppCompatActivity {
                         recipeReader.close();
                         String recipeString = new String(recipeData, "UTF-8");
                         JSONObject inputJSON = new JSONObject(recipeString);
+
                         Log.e("JSON", inputJSON.toString());
                     } catch (Exception e) {
+                        
                         e.printStackTrace();
                     }
                 }
