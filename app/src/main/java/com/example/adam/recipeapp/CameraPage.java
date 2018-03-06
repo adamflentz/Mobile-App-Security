@@ -68,6 +68,15 @@ public class CameraPage extends AppCompatActivity {
             }
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+
+            }
+            else {
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 123);
+            }
+        }
+
 
 
         Button cButton = (Button) findViewById(R.id.takephoto);
