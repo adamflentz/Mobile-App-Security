@@ -1,9 +1,11 @@
 package com.example.adam.recipeapp;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -11,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,9 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeViewer extends AppCompatActivity {
-
+    List<String> finalIngredients = new ArrayList<String>();
+    List<String> finalDirections = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
@@ -89,7 +95,6 @@ public class RecipeViewer extends AppCompatActivity {
                 String Picture = inputJSON.getString("picture");
                 JSONArray Ingredients = new JSONArray(inputJSON.getString("ingredients"));
                 JSONArray RecipeDirections = new JSONArray(inputJSON.getString("directions"));
-                List<String> finalDirections = new ArrayList<String>();
                 ListView listViewDirections = (ListView) findViewById(R.id.directions);
                 for(int n = 0; n < RecipeDirections.length(); n++){
                     String Direction = RecipeDirections.getString(n);
@@ -97,7 +102,6 @@ public class RecipeViewer extends AppCompatActivity {
                 }
                 TextView name = (TextView) findViewById(R.id.name);
                 name.setText(Name);
-                List<String> finalIngredients = new ArrayList<String>();
                 ListView ingredients = (ListView) findViewById(R.id.ingredients);
                 for(int n = 0; n < Ingredients.length(); n++){
                     JSONObject IndividualIngredient = Ingredients.getJSONObject(n);
@@ -106,6 +110,12 @@ public class RecipeViewer extends AppCompatActivity {
                             IndividualIngredient.getString("name");
                     finalIngredients.add(listViewIngredient);
                 }
+                Button submitButton = (Button) findViewById(R.id.email);
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        composeEmail("Salt Pie (Gluten Free)", finalIngredients, finalDirections);
+                    }
+                });
                 ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
                         this, android.R.layout.simple_list_item_1, finalIngredients
                 );
@@ -114,7 +124,6 @@ public class RecipeViewer extends AppCompatActivity {
                 );
                 ingredients.setAdapter(ingredientAdapter);
                 listViewDirections.setAdapter(directionAdapter);
-
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -163,6 +172,34 @@ public class RecipeViewer extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public void composeEmail(String subject, List<String> Ingredients, List<String> Directions) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        StringBuilder finalString = new StringBuilder();
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        finalString.append("Ingredients:");
+        finalString.append('\n');
+        for(int n = 0; n < Ingredients.size(); n++){
+            finalString.append(Ingredients.get(n));
+            if(n != Ingredients.size() - 1) {
+                finalString.append('\n');
+            }
+        }
+        finalString.append('\n');
+        finalString.append("Directions:");
+        finalString.append('\n');
+        for(int n = 0; n < Directions.size(); n++){
+            finalString.append(Directions.get(n));
+            if(n != Directions.size() - 1) {
+                finalString.append('\n');
+            }
+        }
+        intent.putExtra(Intent.EXTRA_TEXT, finalString.toString());
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
 }

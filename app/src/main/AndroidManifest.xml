@@ -21,11 +21,11 @@
         <activity android:name="CameraPage"/>
         <activity android:name="Editor"/>
         <activity android:name="RecipeViewer">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name="Recipe"/>
         <provider android:authorities="com.facebook.app.FacebookContentProvider{928984540639541}"
