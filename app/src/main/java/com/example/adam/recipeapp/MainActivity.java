@@ -59,16 +59,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(recipeDirectory == null){
             //return to main activity with error message regarding nonexistant directory, we might be better served by registering this as a return from the stack
             Toast.makeText(this, "Could not find recipe directory",Toast.LENGTH_SHORT).show();
-            Intent returnIntent = new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(returnIntent);
+//            Intent returnIntent = new Intent(getApplicationContext(),MainActivity.class);
+//            startActivity(returnIntent);
         }
         //Get files in directory
         File[] recipeFilesList = getRecipeFiles(recipeDirectory);
         if(recipeFilesList.length == 0){
             //print error about no existing files, return to main activity
             Toast.makeText(this, "No files within Recipe Directory", Toast.LENGTH_SHORT).show();
-            Intent returnIntent = new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(returnIntent);
+//            Intent returnIntent = new Intent(getApplicationContext(),MainActivity.class);
+//            startActivity(returnIntent);
         }
         convertToJSON(recipeFilesList);
 
@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected File getRecipeDirectory(){
         try{
             File recipeDirectory = new File(Environment.getExternalStorageDirectory(), "recipeFolder");
+            recipeDirectory.mkdirs();
             return recipeDirectory;
         }
         catch(Exception e){
