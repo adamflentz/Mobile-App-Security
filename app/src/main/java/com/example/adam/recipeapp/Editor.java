@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -29,7 +30,6 @@ public class Editor extends ListActivity {
         setContentView(R.layout.activity_editor);
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,ingrList);
-
         Button addButton = (Button) findViewById(R.id.add);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -25,7 +25,6 @@ public class Ingredient extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient);
-
         Bundle bundle = getIntent().getExtras();
         final ArrayList<String> ingrList = (ArrayList<String>) bundle.getStringArrayList("Ingr_Data");
 
