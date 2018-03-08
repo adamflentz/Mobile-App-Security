@@ -208,11 +208,7 @@ public class CameraPage extends AppCompatActivity {
 //        }
     }
 
-
-
-
     //JSON functions
-
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if(Environment.MEDIA_MOUNTED.equals(state)) {
@@ -231,7 +227,7 @@ public class CameraPage extends AppCompatActivity {
     }
 
     public File saveJSONToStorageDir(String recipeName, JSONObject recipe) {
-        File filepath = new File(Environment.getExternalStorageDirectory(), "recipeFolder");
+        File filepath = new File(Environment.getExternalStorageDirectory(), "recipejson");
         File file = new File(filepath, recipeName + ".json");
         try{
             filepath.mkdirs();

@@ -35,6 +35,7 @@ import java.util.List;
 public class RecipeViewer extends AppCompatActivity {
     List<String> finalIngredients = new ArrayList<String>();
     List<String> finalDirections = new ArrayList<String>();
+    Bundle bundle = getIntent().getExtras();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -57,77 +58,46 @@ public class RecipeViewer extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_viewer);
-        String filename = "recipejson";
-        JSONObject recipeJSON = new JSONObject();
-        JSONObject individualRecipe = new JSONObject();
-        JSONObject ingredient = new JSONObject();
         try{
-            ingredient.put("name", "Kosher Salt");
-            ingredient.put("value", "3");
-            ingredient.put("measurement", "pinch");
-        }
-        catch (JSONException e){Log.e("JSON", "JSON not created");}
-        List<JSONObject> IngredientList = new ArrayList<JSONObject>();
-        IngredientList.add(ingredient);
-        JSONArray directionsArray = new JSONArray();
-        directionsArray.put("Eat 3 pinches of Kosher Salt");
-        directionsArray.put("That's so gross why did you do that");
-        try {
-            individualRecipe.put("name", "Salt Pie (gluten free)");
-            individualRecipe.put("ingredients", IngredientList);
-            individualRecipe.put("directions", directionsArray);
-            individualRecipe.put("picture", "salt.jpeg");
-            recipeJSON.put("recipe", individualRecipe);
-        }
-        catch (JSONException e){Log.e("JSON", "JSON not created");}
-        if(isExternalStorageWritable() == true && isExternalStorageReadable() == true){
-            File OutputFile = saveJSONToStorageDir(filename, recipeJSON);
-            try {
-                FileInputStream recipeReader = new FileInputStream(OutputFile);
-                byte[] recipeData = new byte[(int) OutputFile.length()];
-                recipeReader.read(recipeData);
-                recipeReader.close();
-                String recipeString = new String(recipeData, "UTF-8");
-                JSONObject inputJSON = new JSONObject(recipeString);
-                inputJSON = inputJSON.getJSONObject("recipe");
-                Log.e("JSON", inputJSON.toString());
-                String Name = inputJSON.getString("name");
-                String Picture = inputJSON.getString("picture");
-                JSONArray Ingredients = new JSONArray(inputJSON.getString("ingredients"));
-                JSONArray RecipeDirections = new JSONArray(inputJSON.getString("directions"));
-                ListView listViewDirections = (ListView) findViewById(R.id.directions);
-                for(int n = 0; n < RecipeDirections.length(); n++){
-                    String Direction = RecipeDirections.getString(n);
-                    finalDirections.add(Direction);
-                }
-                TextView name = (TextView) findViewById(R.id.name);
-                name.setText(Name);
-                ListView ingredients = (ListView) findViewById(R.id.ingredients);
-                for(int n = 0; n < Ingredients.length(); n++){
-                    JSONObject IndividualIngredient = Ingredients.getJSONObject(n);
-                    String listViewIngredient = IndividualIngredient.getString("value") + " " +
-                            IndividualIngredient.getString("measurement") + " " +
-                            IndividualIngredient.getString("name");
-                    finalIngredients.add(listViewIngredient);
-                }
-                Button submitButton = (Button) findViewById(R.id.email);
-                submitButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        composeEmail("Salt Pie (Gluten Free)", finalIngredients, finalDirections);
-                    }
-                });
-                ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
-                        this, android.R.layout.simple_list_item_1, finalIngredients
-                );
-                ArrayAdapter<String> directionAdapter = new ArrayAdapter<String>(
-                        this, android.R.layout.simple_list_item_1, finalDirections
-                );
-                ingredients.setAdapter(ingredientAdapter);
-                listViewDirections.setAdapter(directionAdapter);
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            String inputJSONString = bundle.getString("JSONrecipe");
+            JSONObject inputJSON = new JSONObject(inputJSONString);
+            String Name = inputJSON.getString("name");
+            String Picture = inputJSON.getString("picture");
+            JSONArray Ingredients = new JSONArray(inputJSON.getString("ingredients"));
+            JSONArray RecipeDirections = new JSONArray(inputJSON.getString("directions"));
+            ListView listViewDirections = (ListView) findViewById(R.id.directions);
+            for(int n = 0; n < RecipeDirections.length(); n++){
+                String Direction = RecipeDirections.getString(n);
+                finalDirections.add(Direction);
             }
+            TextView name = (TextView) findViewById(R.id.name);
+            name.setText(Name);
+            ListView ingredients = (ListView) findViewById(R.id.ingredients);
+            for(int n = 0; n < Ingredients.length(); n++){
+                JSONObject IndividualIngredient = Ingredients.getJSONObject(n);
+                String listViewIngredient = IndividualIngredient.getString("value") + " " +
+                        IndividualIngredient.getString("measurement") + " " +
+                        IndividualIngredient.getString("name");
+                finalIngredients.add(listViewIngredient);
+            }
+            Button submitButton = (Button) findViewById(R.id.email);
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    composeEmail("Salt Pie (Gluten Free)", finalIngredients, finalDirections);
+                }
+            });
+            ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_list_item_1, finalIngredients
+            );
+            ArrayAdapter<String> directionAdapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_list_item_1, finalDirections
+            );
+            ingredients.setAdapter(ingredientAdapter);
+            listViewDirections.setAdapter(directionAdapter);
+
+            }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

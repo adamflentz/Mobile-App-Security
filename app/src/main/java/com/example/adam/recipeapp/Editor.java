@@ -38,7 +38,7 @@ public class Editor extends ListActivity {
                 EditText unitText = (EditText) findViewById(R.id.units);
                 EditText ingrText = (EditText) findViewById(R.id.ingr);
 
-                ingrList.add("x" + amountText.getText().toString() + " " + unitText.getText().toString() + " " + ingrText.getText().toString() );
+                ingrList.add("x " + amountText.getText().toString() + " " + unitText.getText().toString() + " " + ingrText.getText().toString() );
                 Log.d("list", ingrList.toString());
 
                 amountText.setText("");
