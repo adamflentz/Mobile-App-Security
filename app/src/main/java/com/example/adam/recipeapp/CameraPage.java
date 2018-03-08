@@ -203,8 +203,8 @@ public class CameraPage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            mImageView.setImageBitmap(imageBitmap);
         }
     }
 
@@ -232,8 +232,7 @@ public class CameraPage extends AppCompatActivity {
     }
 
     public File saveJSONToStorageDir(String recipeName, JSONObject recipe) {
-        File filepath = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS), recipeName);
+        File filepath = new File(Environment.getExternalStorageDirectory(), "recipeFolder");
         File file = new File(filepath, recipeName + ".json");
         try{
             filepath.mkdirs();
