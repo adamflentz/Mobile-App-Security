@@ -97,7 +97,7 @@ public class CameraPage extends AppCompatActivity {
 
                 EditText nameText = (EditText) findViewById(R.id.name);
 
-                String filename = nameText.toString();
+                String filename = nameText.getText().toString();
                 JSONObject recipeJSON = new JSONObject();
                 JSONObject individualRecipe = new JSONObject();
                 JSONObject ingredient = new JSONObject();
@@ -116,11 +116,12 @@ public class CameraPage extends AppCompatActivity {
                 }
 
                 try {
-                    individualRecipe.put("name", nameText.toString());
+                    individualRecipe.put("name", nameText.getText().toString());
                     individualRecipe.put("ingredients", IngredientList);
                     individualRecipe.put("directions", Directions);
                     individualRecipe.put("picture", mCurrentPhotoPath);
                     recipeJSON.put("recipe", individualRecipe);
+
                 }
                 catch (JSONException e){Log.e("JSON", "JSON not created");}
                 if(isExternalStorageWritable() == true && isExternalStorageReadable() == true){
@@ -201,11 +202,11 @@ public class CameraPage extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
+/*        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
-        }
+        }*/
     }
 
 
