@@ -141,7 +141,7 @@ public class RecipeViewer extends AppCompatActivity {
 
     public File saveJSONToStorageDir(String recipeName, JSONObject recipe) {
         File filepath = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS), recipeName);
+                Environment.DIRECTORY_DOCUMENTS), "recipejson");
         File file = new File(filepath, recipeName + ".json");
         try{
             filepath.mkdirs();
