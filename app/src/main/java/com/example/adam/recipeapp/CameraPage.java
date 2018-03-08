@@ -42,8 +42,7 @@ public class CameraPage extends AppCompatActivity {
     String mCurrentPhotoPath;
     ImageView mImageView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_page);
 
@@ -104,7 +103,7 @@ public class CameraPage extends AppCompatActivity {
                 List<String> IngredientList = new ArrayList<String>();
 
                 for(int i = 0; i < ingrList.size(); i++){
-                    IngredientList.add(ingrList.get(i));
+                    IngredientList.add("\"" + ingrList.get(i) + "\"");
                 }
 
 
@@ -112,7 +111,7 @@ public class CameraPage extends AppCompatActivity {
                 List<String> Directions = new ArrayList<String>();
 
                 for(int i = 0; i < instrList.size(); i++){
-                    Directions.add(instrList.get(i));
+                    Directions.add("\"" + instrList.get(i) + "\"");
                 }
 
                 try {
@@ -202,11 +201,11 @@ public class CameraPage extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-/*        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
-        }*/
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            mImageView.setImageBitmap(imageBitmap);
+//        }
     }
 
     //JSON functions

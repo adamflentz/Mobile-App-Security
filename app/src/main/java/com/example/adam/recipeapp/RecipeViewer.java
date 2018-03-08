@@ -37,7 +37,7 @@ public class RecipeViewer extends AppCompatActivity {
     List<String> finalDirections = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Bundle bundle = getIntent().getExtras();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
@@ -57,77 +57,44 @@ public class RecipeViewer extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_viewer);
-        String filename = "recipejson";
-        JSONObject recipeJSON = new JSONObject();
-        JSONObject individualRecipe = new JSONObject();
-        JSONObject ingredient = new JSONObject();
         try{
-            ingredient.put("name", "Kosher Salt");
-            ingredient.put("value", "3");
-            ingredient.put("measurement", "pinch");
-        }
-        catch (JSONException e){Log.e("JSON", "JSON not created");}
-        List<JSONObject> IngredientList = new ArrayList<JSONObject>();
-        IngredientList.add(ingredient);
-        JSONArray directionsArray = new JSONArray();
-        directionsArray.put("Eat 3 pinches of Kosher Salt");
-        directionsArray.put("That's so gross why did you do that");
-        try {
-            individualRecipe.put("name", "Salt Pie (gluten free)");
-            individualRecipe.put("ingredients", IngredientList);
-            individualRecipe.put("directions", directionsArray);
-            individualRecipe.put("picture", "salt.jpeg");
-            recipeJSON.put("recipe", individualRecipe);
-        }
-        catch (JSONException e){Log.e("JSON", "JSON not created");}
-        if(isExternalStorageWritable() == true && isExternalStorageReadable() == true){
-            File OutputFile = saveJSONToStorageDir(filename, recipeJSON);
-            try {
-                FileInputStream recipeReader = new FileInputStream(OutputFile);
-                byte[] recipeData = new byte[(int) OutputFile.length()];
-                recipeReader.read(recipeData);
-                recipeReader.close();
-                String recipeString = new String(recipeData, "UTF-8");
-                JSONObject inputJSON = new JSONObject(recipeString);
-                inputJSON = inputJSON.getJSONObject("recipe");
-                Log.e("JSON", inputJSON.toString());
-                String Name = inputJSON.getString("name");
-                String Picture = inputJSON.getString("picture");
-                JSONArray Ingredients = new JSONArray(inputJSON.getString("ingredients"));
-                JSONArray RecipeDirections = new JSONArray(inputJSON.getString("directions"));
-                ListView listViewDirections = (ListView) findViewById(R.id.directions);
-                for(int n = 0; n < RecipeDirections.length(); n++){
-                    String Direction = RecipeDirections.getString(n);
-                    finalDirections.add(Direction);
-                }
-                TextView name = (TextView) findViewById(R.id.name);
-                name.setText(Name);
-                ListView ingredients = (ListView) findViewById(R.id.ingredients);
-                for(int n = 0; n < Ingredients.length(); n++){
-                    JSONObject IndividualIngredient = Ingredients.getJSONObject(n);
-                    String listViewIngredient = IndividualIngredient.getString("value") + " " +
-                            IndividualIngredient.getString("measurement") + " " +
-                            IndividualIngredient.getString("name");
-                    finalIngredients.add(listViewIngredient);
-                }
-                Button submitButton = (Button) findViewById(R.id.email);
-                submitButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        composeEmail("Salt Pie (Gluten Free)", finalIngredients, finalDirections);
-                    }
-                });
-                ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
-                        this, android.R.layout.simple_list_item_1, finalIngredients
-                );
-                ArrayAdapter<String> directionAdapter = new ArrayAdapter<String>(
-                        this, android.R.layout.simple_list_item_1, finalDirections
-                );
-                ingredients.setAdapter(ingredientAdapter);
-                listViewDirections.setAdapter(directionAdapter);
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            String inputJSONString = bundle.getString("JSONrecipe");
+            JSONObject JSONRecipe = new JSONObject(inputJSONString);
+            JSONObject inputJSON = JSONRecipe.getJSONObject("recipe");
+            final String Name = inputJSON.getString("name");
+            final String Picture = inputJSON.getString("picture");
+            JSONArray Ingredients = new JSONArray(inputJSON.getString("ingredients"));
+            JSONArray RecipeDirections = new JSONArray(inputJSON.getString("directions"));
+            ListView listViewDirections = (ListView) findViewById(R.id.directions);
+            for(int n = 0; n < RecipeDirections.length(); n++){
+                String Direction = RecipeDirections.getString(n);
+                finalDirections.add(Direction);
             }
+            TextView name = (TextView) findViewById(R.id.name);
+            name.setText(Name);
+            ListView ingredients = (ListView) findViewById(R.id.ingredients);
+            for(int n = 0; n < Ingredients.length(); n++){
+                String IndividualIngredient = Ingredients.getString(n);
+                finalIngredients.add(IndividualIngredient);
+            }
+            Button submitButton = (Button) findViewById(R.id.email);
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    composeEmail(Name, finalIngredients, finalDirections, Picture);
+                }
+            });
+            ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_list_item_1, finalIngredients
+            );
+            ArrayAdapter<String> directionAdapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_list_item_1, finalDirections
+            );
+            ingredients.setAdapter(ingredientAdapter);
+            listViewDirections.setAdapter(directionAdapter);
+
+            }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -174,11 +141,14 @@ public class RecipeViewer extends AppCompatActivity {
         return false;
     }
 
-    public void composeEmail(String subject, List<String> Ingredients, List<String> Directions) {
+    public void composeEmail(String subject, List<String> Ingredients, List<String> Directions, String Picture) {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setType("application/image");
         StringBuilder finalString = new StringBuilder();
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        String picturePath = "file://" + Picture;
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(picturePath));
         finalString.append("Ingredients:");
         finalString.append('\n');
         for(int n = 0; n < Ingredients.size(); n++){
