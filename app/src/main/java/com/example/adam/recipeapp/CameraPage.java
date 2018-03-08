@@ -103,7 +103,7 @@ public class CameraPage extends AppCompatActivity {
                 List<String> IngredientList = new ArrayList<String>();
 
                 for(int i = 0; i < ingrList.size(); i++){
-                    IngredientList.add(ingrList.get(i));
+                    IngredientList.add("\"" + ingrList.get(i) + "\"");
                 }
 
 
@@ -111,7 +111,7 @@ public class CameraPage extends AppCompatActivity {
                 List<String> Directions = new ArrayList<String>();
 
                 for(int i = 0; i < instrList.size(); i++){
-                    Directions.add(instrList.get(i));
+                    Directions.add("\"" + instrList.get(i) + "\"");
                 }
 
                 try {
@@ -227,7 +227,8 @@ public class CameraPage extends AppCompatActivity {
     }
 
     public File saveJSONToStorageDir(String recipeName, JSONObject recipe) {
-        File filepath = new File(Environment.getExternalStorageDirectory(), "recipejson");
+        File filepath = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), "recipejson");
         File file = new File(filepath, recipeName + ".json");
         try{
             filepath.mkdirs();

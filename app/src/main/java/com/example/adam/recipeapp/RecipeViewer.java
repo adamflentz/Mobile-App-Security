@@ -35,10 +35,9 @@ import java.util.List;
 public class RecipeViewer extends AppCompatActivity {
     List<String> finalIngredients = new ArrayList<String>();
     List<String> finalDirections = new ArrayList<String>();
-    Bundle bundle = getIntent().getExtras();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Bundle bundle = getIntent().getExtras();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
@@ -60,9 +59,10 @@ public class RecipeViewer extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_viewer);
         try{
             String inputJSONString = bundle.getString("JSONrecipe");
-            JSONObject inputJSON = new JSONObject(inputJSONString);
-            String Name = inputJSON.getString("name");
-            String Picture = inputJSON.getString("picture");
+            JSONObject JSONRecipe = new JSONObject(inputJSONString);
+            JSONObject inputJSON = JSONRecipe.getJSONObject("recipe");
+            final String Name = inputJSON.getString("name");
+            final String Picture = inputJSON.getString("picture");
             JSONArray Ingredients = new JSONArray(inputJSON.getString("ingredients"));
             JSONArray RecipeDirections = new JSONArray(inputJSON.getString("directions"));
             ListView listViewDirections = (ListView) findViewById(R.id.directions);
@@ -74,16 +74,13 @@ public class RecipeViewer extends AppCompatActivity {
             name.setText(Name);
             ListView ingredients = (ListView) findViewById(R.id.ingredients);
             for(int n = 0; n < Ingredients.length(); n++){
-                JSONObject IndividualIngredient = Ingredients.getJSONObject(n);
-                String listViewIngredient = IndividualIngredient.getString("value") + " " +
-                        IndividualIngredient.getString("measurement") + " " +
-                        IndividualIngredient.getString("name");
-                finalIngredients.add(listViewIngredient);
+                String IndividualIngredient = Ingredients.getString(n);
+                finalIngredients.add(IndividualIngredient);
             }
             Button submitButton = (Button) findViewById(R.id.email);
             submitButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    composeEmail("Salt Pie (Gluten Free)", finalIngredients, finalDirections);
+                    composeEmail(Name, finalIngredients, finalDirections, Picture);
                 }
             });
             ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
@@ -111,7 +108,7 @@ public class RecipeViewer extends AppCompatActivity {
 
     public File saveJSONToStorageDir(String recipeName, JSONObject recipe) {
         File filepath = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS), recipeName);
+                Environment.DIRECTORY_DOCUMENTS), "recipejson");
         File file = new File(filepath, recipeName + ".json");
         try{
             filepath.mkdirs();
@@ -144,11 +141,14 @@ public class RecipeViewer extends AppCompatActivity {
         return false;
     }
 
-    public void composeEmail(String subject, List<String> Ingredients, List<String> Directions) {
+    public void composeEmail(String subject, List<String> Ingredients, List<String> Directions, String Picture) {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setType("application/image");
         StringBuilder finalString = new StringBuilder();
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        String picturePath = "file://" + Picture;
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(picturePath));
         finalString.append("Ingredients:");
         finalString.append('\n');
         for(int n = 0; n < Ingredients.size(); n++){
