@@ -4,17 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/item_recipeTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/item_recipeThumbnail"
-        android:text="RecipeTitle"
-        android:layout_marginLeft="5dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textAlignment="viewStart" />
-
     <ImageView
         android:id="@+id/item_recipeThumbnail"
         android:layout_width="@android:dimen/notification_large_icon_width"
@@ -22,5 +11,21 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
+        app:srcCompat="@drawable/ic_default_thumbnail"
         />
+
+    <TextView
+        android:id="@+id/item_recipeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="@android:dimen/notification_large_icon_height"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/item_recipeThumbnail"
+        android:text="Recipe Name"
+        android:layout_marginStart="5dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:gravity="center_vertical" />
+
+    <!-- for TextView, potentially add android:layout_alignParentTop="true"-->
+
 </RelativeLayout>
